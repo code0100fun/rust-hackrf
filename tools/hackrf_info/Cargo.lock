@@ -1,0 +1,11 @@
+[root]
+name = "hackrf info"
+version = "0.0.1"
+dependencies = [
+ "hackrf 0.0.1",
+]
+
+[[package]]
+name = "hackrf"
+version = "0.0.1"
+

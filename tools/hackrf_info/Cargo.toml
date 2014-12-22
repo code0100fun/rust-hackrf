@@ -1,0 +1,10 @@
+[package]
+name = "hackrf_info"
+version = "0.0.1"
+authors = ["Chase McCarthy <chase@code0100fun.com>"]
+
+[dependencies.hackrf]
+path = "../../"
+
+[[bin]]
+name = "hackrf_info"

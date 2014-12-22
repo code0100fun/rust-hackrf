@@ -1,0 +1,7 @@
+[package]
+name = "hackrf"
+version = "0.0.1"
+authors = ["Chase McCarthy <chase@code0100fun.com>"]
+
+[lib]
+name = "hackrf"

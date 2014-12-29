@@ -8,13 +8,13 @@ extern crate docopt;
 extern crate libc;
 
 use docopt::Docopt;
-use hackrf::{HackRF};
+use hackrf::HackRF;
 use std::io::{File, Truncate, ReadWrite};
 use std::os::unix::AsRawFd;
 use libc::{setvbuf, _IOFBF};
 use libc::funcs::posix88::stdio::fdopen;
 use std::ptr;
-use std::thread;
+use std::thread::Thread;
 
 docopt!(Args deriving Show, "
 Usage:
@@ -108,7 +108,7 @@ fn read_into_file(rx:Receiver<Vec<u8>>, mut file:File, num_samples:u32) {
     let mut bytes_left = (num_samples * 2) as uint;
     let limit_samples = num_samples > 0;
 
-    let _ = thread::Builder::new().name("writeFile".to_string()).spawn(move || {
+    let _ = Thread::spawn(move || {
         loop {
             let mut bytes = rx.recv();
             let to_write = bytes_to_write(bytes.len(), bytes_left, limit_samples);
@@ -122,29 +122,18 @@ fn read_into_file(rx:Receiver<Vec<u8>>, mut file:File, num_samples:u32) {
                 break;
             }
         }
-        return 0i32;
     });
 }
 
 fn main() {
     let args: Args = Args::docopt().decode().unwrap_or_else(|e| e.exit());
 
-    match HackRF::new() {
-        Err(error) => println!("{}", error),
-        Ok(mut hackrf) => {
-            if hackrf.found {
-                match hackrf.open() {
-                    Err(error) => println!("{}", error),
-                    Ok(_) => {
-                        let num_samples = get_param(args.flag_num_samples, 0);
-                        let file = open_file(args.flag_rx_filename.as_slice());
-                        setup_params(&mut hackrf, &args);
+    HackRF::open(|mut hackrf| {
+        let num_samples = get_param(args.flag_num_samples, 0);
+        let file = open_file(args.flag_rx_filename.as_slice());
+        setup_params(&mut hackrf, &args);
 
-                        let (_, rx) = hackrf.start();
-                        read_into_file(rx, file, num_samples);
-                    }
-                }
-            }
-        }
-    }
+        let (_, rx) = hackrf.start();
+        read_into_file(rx, file, num_samples);
+    });
 }

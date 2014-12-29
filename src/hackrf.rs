@@ -145,7 +145,23 @@ impl HackRF {
         }
     }
 
-    pub fn open(&self) -> Result<i32, String> {
+    pub fn open(opened:|HackRF|) {
+        match HackRF::new() {
+            Err(error) => println!("{}", error),
+            Ok(hackrf) => {
+                if hackrf.found {
+                    match hackrf.open_device() {
+                        Err(error) => println!("{}", error),
+                        Ok(_) => {
+                            opened(hackrf);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    pub fn open_device(&self) -> Result<i32, String> {
         let status = unsafe {
             hackrf_open(&self.device)
         };

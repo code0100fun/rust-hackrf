@@ -31,7 +31,9 @@ Options:
     -l, --rx-lna <gain-db>           RX LNA (IF) gain, 0-40dB, 8dB steps.
     -n, --num-samples <num-samples>  Number of samples to transfer (default is unlimited).
     -b, --bb-filter <bandwidth-hz>   Set baseband filter bandwidth in MHz.\n\tPossible values: 1.75/2.5/3.5/5/5.5/6/7/8/9/10/12/14/15/20/24/28MHz, default < sample_rate_hz.
-",  flag_sample_rate: Option<u32>,
+",
+    flag_frequency: Option<u64>,
+    flag_sample_rate: Option<u32>,
     flag_bb_filter: Option<u32>,
     flag_rx_vga: Option<u32>,
     flag_rx_lna: Option<u32>,
@@ -69,6 +71,11 @@ fn set_param<T:Copy>(value:T, result:|T| -> Result<i32,String>, status:|T|) {
 }
 
 fn setup_params(hackrf:&mut HackRF, args: &Args) {
+    set_param(get_param(args.flag_frequency, 900000000),
+        |v| { hackrf.set_freq(v) },
+        |v| { println!("Frequency set to: {} Hz", v); }
+    );
+
     set_param(get_param(args.flag_sample_rate, 1000000),
         |v| { hackrf.set_sample_rate(v) },
         |v| { println!("Sample rate set to: {} Hz", v); }

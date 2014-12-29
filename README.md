@@ -18,8 +18,9 @@ use hackrf::HackRF;
 
 HackRF::open(|mut hackrf| {
 
+    hackrf.set_freq(900000000);
     hackrf.set_sample_rate(8000000);
-    hackrf.set_baseband_filter_bandwidth(7000000);
+    hackrf.set_baseband_filter_bandwidth(28000000);
     hackrf.set_vga_gain(20);
     hackrf.set_lna_gain(8);
 

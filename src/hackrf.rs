@@ -228,6 +228,16 @@ impl HackRF {
         }
     }
 
+    pub fn set_freq(&self, freq_hz: uint64_t) -> Result<c_int, String> {
+        let status = unsafe {
+            hackrf_set_freq(self.device, freq_hz)
+        };
+        match status {
+            HACKRF_SUCCESS => Ok(HACKRF_SUCCESS),
+            _ => Err("Failed to set frequency".to_string())
+        }
+    }
+
     pub fn set_sample_rate(&self, freq_hz: uint32_t) -> Result<c_int, String> {
         let status = unsafe {
             hackrf_set_sample_rate_manual(self.device, freq_hz, 1)

@@ -1,0 +1,13 @@
+[package]
+name = "hackrf_transfer"
+version = "0.0.1"
+authors = ["Chase McCarthy <chase@code0100fun.com>"]
+
+[dependencies.hackrf]
+path = "../../"
+
+[dependencies.docopt_macros]
+git = "git://github.com/docopt/docopt.rs"
+
+[[bin]]
+name = "hackrf_transfer"

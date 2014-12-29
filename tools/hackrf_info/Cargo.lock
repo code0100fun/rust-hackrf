@@ -1,5 +1,5 @@
 [root]
-name = "hackrf info"
+name = "hackrf_info"
 version = "0.0.1"
 dependencies = [
  "hackrf 0.0.1",

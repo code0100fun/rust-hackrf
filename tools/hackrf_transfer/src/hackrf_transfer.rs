@@ -1,3 +1,4 @@
+#![feature(old_orphan_check)]
 #![feature(phase)]
 #![feature(macro_rules)]
 
@@ -15,8 +16,10 @@ use libc::{setvbuf, _IOFBF};
 use libc::funcs::posix88::stdio::fdopen;
 use std::ptr;
 use std::thread::Thread;
+use std::sync::mpsc::{Receiver};
+use std::c_str::ToCStr;
 
-docopt!(Args deriving Show, "
+docopt!(Args derive Show, "
 Usage:
        hackrf_transfer -r <rx-filename> [-f <frequency>] [-s <sample-rate>] [-g <rx-vga>] [-l <rx-lna>] [-n <num-samples>] [-b <bb-filter>]
        hackrf_transfer (--help | --version)
@@ -117,16 +120,20 @@ fn read_into_file(rx:Receiver<Vec<u8>>, mut file:File, num_samples:u32) {
 
     let _ = Thread::spawn(move || {
         loop {
-            let mut bytes = rx.recv();
-            let to_write = bytes_to_write(bytes.len(), bytes_left, limit_samples);
-            bytes_left -= to_write;
-            bytes.truncate(to_write);
-            match file.write(bytes.as_slice()) {
-                Err(message) => { panic!("Failed to write to output: {}", message); },
-                Ok(_) => {}
-            }
-            if limit_samples && bytes_left <= 0 {
-                break;
+            match rx.recv() {
+              Err(e) => {},
+              Ok(mut bytes) => {
+                let to_write = bytes_to_write(bytes.len(), bytes_left, limit_samples);
+                bytes_left -= to_write;
+                bytes.truncate(to_write);
+                match file.write(bytes.as_slice()) {
+                    Err(message) => { panic!("Failed to write to output: {}", message); },
+                    Ok(_) => {}
+                }
+                if limit_samples && bytes_left <= 0 {
+                    break;
+                }
+              }
             }
         }
     });

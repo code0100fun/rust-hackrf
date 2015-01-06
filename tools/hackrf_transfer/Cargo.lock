@@ -2,25 +2,25 @@
 name = "hackrf_transfer"
 version = "0.0.1"
 dependencies = [
- "docopt_macros 0.6.20 (git+git://github.com/docopt/docopt.rs)",
+ "docopt_macros 0.6.23 (git+git://github.com/docopt/docopt.rs)",
  "hackrf 0.0.1",
 ]
 
 [[package]]
 name = "docopt"
-version = "0.6.20"
-source = "git+git://github.com/docopt/docopt.rs#338f1e66c4ee6433092a45a12e624bb309706101"
+version = "0.6.23"
+source = "git+git://github.com/docopt/docopt.rs#0118387bf0bb47a770f0ee2d19b53a5fa11dbc8b"
 dependencies = [
- "regex 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "regex 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "docopt_macros"
-version = "0.6.20"
-source = "git+git://github.com/docopt/docopt.rs#338f1e66c4ee6433092a45a12e624bb309706101"
+version = "0.6.23"
+source = "git+git://github.com/docopt/docopt.rs#0118387bf0bb47a770f0ee2d19b53a5fa11dbc8b"
 dependencies = [
- "docopt 0.6.20 (git+git://github.com/docopt/docopt.rs)",
+ "docopt 0.6.23 (git+git://github.com/docopt/docopt.rs)",
 ]
 
 [[package]]
@@ -29,11 +29,11 @@ version = "0.0.1"
 
 [[package]]
 name = "regex"
-version = "0.1.4"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "rustc-serialize"
-version = "0.1.5"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
